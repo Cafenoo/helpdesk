@@ -1,0 +1,58 @@
+jwt:
+    properties:
+        expiration-minutes: 1000
+        secret: 8JRCMHtIfHgmLdup3Y9nregZgvv5mIuoQaao8bPE
+logging:
+    level:
+        org:
+            hibernate: INFO
+            springframework:
+                web: INFO
+server:
+    port: 8080
+    servlet:
+        context-path: ''
+spring:
+    datasource:
+        driver-class-name: org.h2.Driver
+        name: helpdesk
+        password: ''
+        url: jdbc:h2:mem:helpdesk;DB_CLOSE_DELAY=-1
+        username: sa
+    h2:
+        console:
+            enabled: true
+    jackson:
+        locale: ru_RU
+        time-zone: Europe/Moscow
+    jpa:
+        database-platform: org.hibernate.dialect.H2Dialect
+        hibernate:
+            ddl-auto: create-drop
+        properties:
+            hibernate:
+                current-session-context-class: org.springframework.orm.hibernate5.SpringSessionContext
+        show-sql: false
+    mail:
+        encoding: UTF-8
+        host: smtp.gmail.com
+        password: darinkarlsson1337
+        port: 587
+        properties:
+            mail:
+                smtp:
+                    auth: true
+                    connectiontimeout: 5000
+                    starttls:
+                        enable: true
+                    timeout: 5000
+                    writetimeout: 5000
+        url: http://localhost:3000/main-page/
+        username: darinkarlsson@gmail.com
+    servlet:
+        multipart:
+            max-file-size: 5MB
+            max-request-size: 50MB
+    thymeleaf:
+        prefix: classpath:/mail/
+        suffix: .html

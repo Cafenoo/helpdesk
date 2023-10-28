@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Feedback was provided</title>
+</head>
+<body>
+    <div>
+        <p>Dear <td th:text="${name}"></td>, </p>
+        <br/>
+        <p>The feedback was provided on the ticket <a th:href="${url} + ${ticketId}"><td th:text="${ticketId}"></td></a>.</p>
+    </div>
+</body>
+</html>
