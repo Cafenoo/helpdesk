@@ -10,11 +10,17 @@ public class FeedbackConverterV1 implements FeedbackConverter {
 
   @Override
   public Feedback convertToEntity(FeedbackDto feedbackDto) {
-    return Feedback.builder().rate(feedbackDto.getRate()).text(feedbackDto.getComment()).build();
+    return Feedback.builder()
+        .rate(feedbackDto.getRate())
+        .text(feedbackDto.getComment())
+        .build();
   }
 
   @Override
   public FeedbackDto convertToDto(Feedback feedback) {
-    return FeedbackDto.builder().rate(feedback.getRate()).comment(feedback.getText()).build();
+    return FeedbackDto.builder()
+        .rate(feedback.getRate())
+        .comment(feedback.getText())
+        .build();
   }
 }

@@ -1,9 +1,16 @@
 package com.training.abarsukov.helpdesk.security.jwt;
 
+import static java.lang.System.currentTimeMillis;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.training.abarsukov.helpdesk.dto.UserDto;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import java.io.IOException;
+import java.util.Date;
+import javax.servlet.FilterChain;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.json.JsonParseException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,14 +18,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import javax.servlet.FilterChain;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.Date;
-
-import static java.lang.System.currentTimeMillis;
 
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -29,7 +28,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
   @Override
   public Authentication attemptAuthentication(
-      HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+      HttpServletRequest request,
+      HttpServletResponse response) throws AuthenticationException {
     final UserDto userDto = getUserCredentialsFromRequest(request);
     final Authentication authentication = createAuthentication(userDto);
     return authenticationManager.authenticate(authentication);
@@ -40,12 +40,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
       HttpServletRequest request,
       HttpServletResponse response,
       FilterChain chain,
-      Authentication authResult)
-      throws IOException {
+      Authentication authResult) throws IOException {
     final String token = generateToken(authResult);
     final String bearerToken = JwtProperties.TOKEN_PREFIX + token;
     response.addHeader(JwtProperties.TOKEN_HEADER, bearerToken);
-    response.getWriter().print(bearerToken);
+    response.getWriter()
+        .print(bearerToken);
   }
 
   private UsernamePasswordAuthenticationToken createAuthentication(UserDto userDto) {

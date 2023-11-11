@@ -1,16 +1,15 @@
 package com.training.abarsukov.helpdesk.service.impl;
 
+import static org.springframework.transaction.annotation.Propagation.SUPPORTS;
+
 import com.training.abarsukov.helpdesk.model.Ticket;
 import com.training.abarsukov.helpdesk.repository.TicketRepository;
 import com.training.abarsukov.helpdesk.security.UserService;
 import com.training.abarsukov.helpdesk.service.TicketAccessHandler;
+import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityNotFoundException;
-
-import static org.springframework.transaction.annotation.Propagation.SUPPORTS;
 
 @Service
 @RequiredArgsConstructor

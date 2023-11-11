@@ -1,5 +1,9 @@
 package com.training.abarsukov.helpdesk.validation;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import javax.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -8,40 +12,58 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 
-import javax.validation.ConstraintValidatorContext;
-
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 class FileExtensionValidatorTest {
 
-  @MockBean private ConstraintValidatorContext context;
+  @MockBean 
+  private ConstraintValidatorContext context;
 
   private FileExtensionValidator fileExtensionValidator;
 
   @BeforeEach
-  private void setUp() {
+  void setUp() {
     fileExtensionValidator = new FileExtensionValidator();
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"file.pdf", "file.doc", "file.docx", "file.png", "file.jpeg", "file.jpg"})
+  @ValueSource(strings = {
+      "file.pdf",
+      "file.doc",
+      "file.docx", 
+      "file.png", 
+      "file.jpeg", 
+      "file.jpg"
+  })
   void testIsValidWithPositiveCases(String valueToVerify) {
     final byte[] emptyByteArray = {};
     final MockMultipartFile mockMultipartFile =
         new MockMultipartFile(
-            valueToVerify, valueToVerify, MediaType.MULTIPART_FORM_DATA_VALUE, emptyByteArray);
+            valueToVerify, 
+            valueToVerify, 
+            MediaType.MULTIPART_FORM_DATA_VALUE,
+            emptyByteArray
+        );
 
     assertTrue(fileExtensionValidator.isValid(mockMultipartFile, context));
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"file.obj", "obj.bmp", "file", "file.", ".file", "."})
+  @ValueSource(strings = {
+      "file.obj", 
+      "obj.bmp", 
+      "file", 
+      "file.", 
+      ".file", 
+      "."
+  })
   void testIsValidWithNegativeCases(String valueToVerify) {
     final byte[] emptyByteArray = {};
     final MockMultipartFile mockMultipartFile =
         new MockMultipartFile(
-            valueToVerify, valueToVerify, MediaType.MULTIPART_FORM_DATA_VALUE, emptyByteArray);
+            valueToVerify, 
+            valueToVerify, 
+            MediaType.MULTIPART_FORM_DATA_VALUE, 
+            emptyByteArray
+        );
 
     assertFalse(fileExtensionValidator.isValid(mockMultipartFile, context));
   }

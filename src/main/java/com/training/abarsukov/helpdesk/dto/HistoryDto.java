@@ -1,10 +1,9 @@
 package com.training.abarsukov.helpdesk.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import java.sql.Timestamp;
 import lombok.Builder;
 import lombok.Data;
-
-import java.sql.Timestamp;
 
 @Data
 @Builder

@@ -1,11 +1,10 @@
 package com.training.abarsukov.helpdesk.validation;
 
 import com.training.abarsukov.helpdesk.validation.constraints.DateNotLessThanCurrentDate;
-
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
 import java.sql.Date;
 import java.time.LocalDate;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 
 public class DateNotLessThanCurrentDateValidator
     implements ConstraintValidator<DateNotLessThanCurrentDate, Date> {

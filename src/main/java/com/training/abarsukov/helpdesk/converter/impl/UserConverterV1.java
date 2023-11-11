@@ -10,11 +10,17 @@ public class UserConverterV1 implements UserConverter {
 
   @Override
   public UserDto convertToDto(User user) {
-    return UserDto.builder().firstName(user.getFirstName()).lastName(user.getLastName()).build();
+    return UserDto.builder()
+        .firstName(user.getFirstName())
+        .lastName(user.getLastName())
+        .build();
   }
 
   @Override
   public User convertToEntity(UserDto userDto) {
-    return User.builder().firstName(userDto.getFirstName()).lastName(userDto.getLastName()).build();
+    return User.builder()
+        .firstName(userDto.getFirstName())
+        .lastName(userDto.getLastName())
+        .build();
   }
 }

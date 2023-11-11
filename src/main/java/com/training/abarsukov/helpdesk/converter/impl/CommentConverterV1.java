@@ -24,6 +24,8 @@ public class CommentConverterV1 implements CommentConverter {
 
   @Override
   public Comment convertToEntity(CommentDto commentDto) {
-    return Comment.builder().text(commentDto.getText()).build();
+    return Comment.builder()
+        .text(commentDto.getText())
+        .build();
   }
 }

@@ -9,13 +9,12 @@ import com.training.abarsukov.helpdesk.security.UserService;
 import com.training.abarsukov.helpdesk.service.EmailService;
 import com.training.abarsukov.helpdesk.service.FeedbackService;
 import com.training.abarsukov.helpdesk.service.TicketAccessHandler;
+import java.sql.Date;
+import java.time.LocalDate;
+import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityNotFoundException;
-import java.sql.Date;
-import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
@@ -50,10 +49,9 @@ public class FeedbackServiceV1 implements FeedbackService {
 
   @Override
   public FeedbackDto findByTicketId(Long id) {
-    final Feedback feedback =
-        feedbackRepository
-            .findByTicketId(id, userService.getUser())
-            .orElseThrow(EntityNotFoundException::new);
+    final Feedback feedback = feedbackRepository
+        .findByTicketId(id, userService.getUser())
+        .orElseThrow(EntityNotFoundException::new);
     return feedbackConverter.convertToDto(feedback);
   }
 }

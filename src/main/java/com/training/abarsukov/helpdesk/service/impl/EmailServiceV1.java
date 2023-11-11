@@ -6,6 +6,12 @@ import com.training.abarsukov.helpdesk.model.User;
 import com.training.abarsukov.helpdesk.model.enums.Role;
 import com.training.abarsukov.helpdesk.security.UserService;
 import com.training.abarsukov.helpdesk.service.EmailService;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -14,13 +20,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
-
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -47,7 +46,9 @@ public class EmailServiceV1 implements EmailService {
   private String url;
 
   private List<String> extractEmailsFromUsers(List<User> users) {
-    return users.stream().map(User::getEmail).collect(Collectors.toList());
+    return users.stream()
+        .map(User::getEmail)
+        .collect(Collectors.toList());
   }
 
   private void sendMail(
@@ -90,8 +91,9 @@ public class EmailServiceV1 implements EmailService {
     final List<User> recipients = userService.getUsersByRole(Role.MANAGER);
     final String[] recipientsEmails = extractEmailsFromUsers(recipients).toArray(String[]::new);
 
-    final Map<String, Object> contextVariables =
-        Map.of(URL_VARIABLE, url, TICKET_ID_VARIABLE, ticket.getId());
+    final Map<String, Object> contextVariables = Map.of(
+        URL_VARIABLE, url,
+        TICKET_ID_VARIABLE, ticket.getId());
 
     final String htmlTemplateName = "new-ticket-for-approval";
 
@@ -111,8 +113,9 @@ public class EmailServiceV1 implements EmailService {
 
     final String[] recipientsEmails = extractEmailsFromUsers(recipients).toArray(String[]::new);
 
-    final Map<String, Object> contextVariables =
-        Map.of(URL_VARIABLE, url, TICKET_ID_VARIABLE, ticket.getId());
+    final Map<String, Object> contextVariables = Map.of(
+        URL_VARIABLE, url,
+        TICKET_ID_VARIABLE, ticket.getId());
 
     final String htmlTemplateName = "ticket-was-approved";
 
@@ -128,11 +131,10 @@ public class EmailServiceV1 implements EmailService {
     final String recipientEmail = owner.getEmail();
     final String name = owner.getFirstName() + SPACE + owner.getLastName();
 
-    final Map<String, Object> contextVariables =
-        Map.of(
-            URL_VARIABLE, url,
-            TICKET_ID_VARIABLE, ticket.getId(),
-            NAME_VARIABLE, name);
+    final Map<String, Object> contextVariables = Map.of(
+        URL_VARIABLE, url,
+        TICKET_ID_VARIABLE, ticket.getId(),
+        NAME_VARIABLE, name);
 
     final String htmlTemplateName = "ticket-was-declined";
 
@@ -148,11 +150,10 @@ public class EmailServiceV1 implements EmailService {
     final String recipientEmail = owner.getEmail();
     final String name = owner.getFirstName() + SPACE + owner.getLastName();
 
-    final Map<String, Object> contextVariables =
-        Map.of(
-            URL_VARIABLE, url,
-            TICKET_ID_VARIABLE, ticket.getId(),
-            NAME_VARIABLE, name);
+    final Map<String, Object> contextVariables = Map.of(
+        URL_VARIABLE, url,
+        TICKET_ID_VARIABLE, ticket.getId(),
+        NAME_VARIABLE, name);
 
     final String htmlTemplateName = "ticket-was-cancelled";
 
@@ -171,8 +172,9 @@ public class EmailServiceV1 implements EmailService {
 
     final String[] recipientsEmails = extractEmailsFromUsers(recipients).toArray(String[]::new);
 
-    final Map<String, Object> contextVariables =
-        Map.of(URL_VARIABLE, url, TICKET_ID_VARIABLE, ticket.getId());
+    final Map<String, Object> contextVariables = Map.of(
+        URL_VARIABLE, url,
+        TICKET_ID_VARIABLE, ticket.getId());
 
     final String htmlTemplateName = "ticket-was-cancelled-by-engineer";
 
@@ -188,11 +190,10 @@ public class EmailServiceV1 implements EmailService {
     final String recipientEmail = owner.getEmail();
     final String name = owner.getFirstName() + SPACE + owner.getLastName();
 
-    final Map<String, Object> contextVariables =
-        Map.of(
-            URL_VARIABLE, url,
-            TICKET_ID_VARIABLE, ticket.getId(),
-            NAME_VARIABLE, name);
+    final Map<String, Object> contextVariables = Map.of(
+        URL_VARIABLE, url,
+        TICKET_ID_VARIABLE, ticket.getId(),
+        NAME_VARIABLE, name);
 
     final String htmlTemplateName = "ticket-was-done";
 
@@ -208,11 +209,10 @@ public class EmailServiceV1 implements EmailService {
     final String recipientEmail = assignee.getEmail();
     final String name = assignee.getFirstName() + SPACE + assignee.getLastName();
 
-    final Map<String, Object> contextVariables =
-        Map.of(
-            URL_VARIABLE, url,
-            TICKET_ID_VARIABLE, ticket.getId(),
-            NAME_VARIABLE, name);
+    final Map<String, Object> contextVariables = Map.of(
+        URL_VARIABLE, url,
+        TICKET_ID_VARIABLE, ticket.getId(),
+        NAME_VARIABLE, name);
 
     final String htmlTemplateName = "ticket-feedback-was-provided";
 

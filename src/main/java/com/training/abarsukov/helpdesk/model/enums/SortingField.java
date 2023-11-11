@@ -1,20 +1,18 @@
 package com.training.abarsukov.helpdesk.model.enums;
 
+import static java.util.Comparator.comparing;
+
 import com.training.abarsukov.helpdesk.model.Ticket;
+import java.util.Comparator;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.comparator.Comparators;
 
-import java.util.Comparator;
-
-import static java.util.Comparator.comparing;
-
 @Getter
 @RequiredArgsConstructor
 public enum SortingField {
-  DEFAULT(
-      comparing(Ticket::getUrgency)
-          .thenComparing(Ticket::getDesiredResolutionDate, Comparators.nullsHigh())),
+  DEFAULT(comparing(Ticket::getUrgency)
+      .thenComparing(Ticket::getDesiredResolutionDate, Comparators.nullsHigh())),
   ID(comparing(Ticket::getId)),
   ID_DESC(ID.getComparator().reversed()),
   NAME(comparing(Ticket::getName)),

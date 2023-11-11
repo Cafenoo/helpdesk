@@ -1,13 +1,13 @@
 package com.training.abarsukov.helpdesk.converter.impl;
 
+import static java.util.Objects.nonNull;
+
 import com.training.abarsukov.helpdesk.converter.TicketConverter;
 import com.training.abarsukov.helpdesk.converter.UserConverter;
 import com.training.abarsukov.helpdesk.dto.TicketDto;
 import com.training.abarsukov.helpdesk.model.Ticket;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import static java.util.Objects.nonNull;
 
 @Component
 @RequiredArgsConstructor

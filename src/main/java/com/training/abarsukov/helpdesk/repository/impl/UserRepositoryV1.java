@@ -4,14 +4,15 @@ import com.training.abarsukov.helpdesk.model.User;
 import com.training.abarsukov.helpdesk.model.enums.Role;
 import com.training.abarsukov.helpdesk.repository.UserRepository;
 import com.training.abarsukov.helpdesk.repository.generic.abstracts.AbstractRepository;
-import org.springframework.stereotype.Repository;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import org.springframework.stereotype.Repository;
 
 @Repository
-public class UserRepositoryV1 extends AbstractRepository<User, Long> implements UserRepository {
+public class UserRepositoryV1
+    extends AbstractRepository<User, Long>
+    implements UserRepository {
 
   private static final String SELECT_USER = "from User u";
 
@@ -22,7 +23,8 @@ public class UserRepositoryV1 extends AbstractRepository<User, Long> implements 
   @Override
   public Optional<User> findByEmail(String email) {
     final Map<String, Object> parameters = Map.of("email", email);
-    return findByParameters(SELECT_USER + BY_EMAIL, parameters).stream().findFirst();
+    return findByParameters(SELECT_USER + BY_EMAIL, parameters).stream()
+        .findFirst();
   }
 
   @Override

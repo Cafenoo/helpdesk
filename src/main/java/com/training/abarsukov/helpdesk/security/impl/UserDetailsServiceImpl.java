@@ -1,16 +1,15 @@
 package com.training.abarsukov.helpdesk.security.impl;
 
+import static org.springframework.transaction.annotation.Propagation.SUPPORTS;
+
 import com.training.abarsukov.helpdesk.repository.UserRepository;
+import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityNotFoundException;
-
-import static org.springframework.transaction.annotation.Propagation.SUPPORTS;
 
 @Service
 @RequiredArgsConstructor

@@ -1,5 +1,7 @@
 package com.training.abarsukov.helpdesk.dto;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.training.abarsukov.helpdesk.model.Category;
@@ -8,19 +10,16 @@ import com.training.abarsukov.helpdesk.model.enums.State;
 import com.training.abarsukov.helpdesk.model.enums.Urgency;
 import com.training.abarsukov.helpdesk.validation.constraints.DateNotLessThanCurrentDate;
 import com.training.abarsukov.helpdesk.validation.constraints.EnterField;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import java.sql.Date;
+import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.sql.Date;
-import java.util.List;
-
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
@@ -61,9 +60,11 @@ public class TicketDto {
 
   private UserDto approver;
 
-  @Valid private CommentDto comment;
+  @Valid
+  private CommentDto comment;
 
-  @Valid private AttachmentDto attachment;
+  @Valid
+  private AttachmentDto attachment;
 
   private List<Action> actions;
 }

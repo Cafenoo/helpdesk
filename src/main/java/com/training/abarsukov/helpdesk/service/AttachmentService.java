@@ -4,6 +4,7 @@ import com.training.abarsukov.helpdesk.dto.AttachmentDto;
 import com.training.abarsukov.helpdesk.model.Attachment;
 
 public interface AttachmentService {
+
   void delete(Long ticketId);
 
   void save(Long ticketId, AttachmentDto attachmentDto);

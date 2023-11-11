@@ -2,13 +2,12 @@ package com.training.abarsukov.helpdesk.security.impl;
 
 import com.training.abarsukov.helpdesk.model.User;
 import com.training.abarsukov.helpdesk.security.ApplicationUserDetails;
+import java.util.Collection;
+import java.util.Collections;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
-import java.util.Collection;
-import java.util.Collections;
 
 @RequiredArgsConstructor
 @Getter

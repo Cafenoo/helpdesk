@@ -1,15 +1,21 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>Ticket was done</title>
+  <meta charset="UTF-8">
+  <title>Ticket was done</title>
 </head>
 <body>
 <div>
-<p>Dear <td th:text="${name}"></td>, </p>
-<br/>
-<p>Ticket <a th:href="${url} + ${ticketId}"><td th:text="${ticketId}"></td></a> was done by the Engineer.</p>
-<p>Please provide your feedback by clicking on the ticket ID.</p>
+  <p>Dear
+    <td th:text="${name}"></td>
+    ,
+  </p>
+  <br/>
+  <p>Ticket <a th:href="${url} + ${ticketId}">
+    <td th:text="${ticketId}"></td>
+  </a> was done by the Engineer.
+  </p>
+  <p>Please provide your feedback by clicking on the ticket ID.</p>
 </div>
 </body>
 </html>

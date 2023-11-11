@@ -1,5 +1,10 @@
 package com.training.abarsukov.helpdesk.service.impl;
 
+import static java.text.MessageFormat.format;
+import static java.util.Objects.nonNull;
+import static java.util.Optional.ofNullable;
+import static org.springframework.transaction.annotation.Propagation.SUPPORTS;
+
 import com.training.abarsukov.helpdesk.converter.TicketConverter;
 import com.training.abarsukov.helpdesk.dto.TicketDto;
 import com.training.abarsukov.helpdesk.exception.TicketStateException;
@@ -15,19 +20,13 @@ import com.training.abarsukov.helpdesk.service.CommentService;
 import com.training.abarsukov.helpdesk.service.EmailService;
 import com.training.abarsukov.helpdesk.service.HistoryService;
 import com.training.abarsukov.helpdesk.service.TicketService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityNotFoundException;
 import java.sql.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static java.text.MessageFormat.format;
-import static java.util.Objects.nonNull;
-import static java.util.Optional.ofNullable;
-import static org.springframework.transaction.annotation.Propagation.SUPPORTS;
+import javax.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -57,17 +56,21 @@ public class TicketServiceV1 implements TicketService {
       SortingField sortingField,
       String keyword,
       Boolean isPersonal) {
-    final List<Ticket> tickets =
-        ticketRepository.findAll(page, pageSize, isPersonal, keyword, userService.getUser());
+    final List<Ticket> tickets = ticketRepository.findAll(
+        page,
+        pageSize,
+        isPersonal,
+        keyword,
+        userService.getUser());
 
-    final List<TicketDto> ticketDtoList =
-        tickets.stream()
-            .sorted(sortingField.getComparator())
-            .map(ticketConverter::convertToTicketListDto)
-            .collect(Collectors.toList());
+    final List<TicketDto> ticketDtoList = tickets.stream()
+        .sorted(sortingField.getComparator())
+        .map(ticketConverter::convertToTicketListDto)
+        .collect(Collectors.toList());
 
     ticketDtoList.forEach(
-        ticketDto -> ticketDto.setActions(actionHandler.getPossibleActions(ticketDto.getState())));
+        ticketDto -> ticketDto.setActions(
+            actionHandler.getPossibleActions(ticketDto.getState())));
 
     return ticketDtoList;
   }
@@ -75,10 +78,9 @@ public class TicketServiceV1 implements TicketService {
   @Override
   @Transactional(propagation = SUPPORTS, readOnly = true)
   public TicketDto findById(Long id) {
-    final Ticket ticket =
-        ticketRepository
-            .findById(id, userService.getUser())
-            .orElseThrow(EntityNotFoundException::new);
+    final Ticket ticket = ticketRepository
+        .findById(id, userService.getUser())
+        .orElseThrow(EntityNotFoundException::new);
 
     final TicketDto ticketDto = ticketConverter.convertToDto(ticket);
     ticketDto.setActions(actionHandler.getPossibleActions(ticket.getState()));
@@ -121,10 +123,9 @@ public class TicketServiceV1 implements TicketService {
   @Override
   @Transactional
   public void edit(Long id, TicketDto ticketDto) {
-    final Ticket ticket =
-        ticketRepository
-            .findByIdToEditTicket(id, userService.getUser())
-            .orElseThrow(EntityNotFoundException::new);
+    final Ticket ticket = ticketRepository
+        .findByIdToEditTicket(id, userService.getUser())
+        .orElseThrow(EntityNotFoundException::new);
 
     final Ticket convertedTicket = ticketConverter.convertToEntity(ticketDto);
     convertedTicket.setId(id);
@@ -156,10 +157,9 @@ public class TicketServiceV1 implements TicketService {
   @Override
   @Transactional
   public void transitState(Long id, Action action) {
-    final Ticket ticket =
-        ticketRepository
-            .findById(id, userService.getUser())
-            .orElseThrow(EntityNotFoundException::new);
+    final Ticket ticket = ticketRepository
+        .findById(id, userService.getUser())
+        .orElseThrow(EntityNotFoundException::new);
 
     final State previousState = ticket.getState();
 
@@ -167,8 +167,9 @@ public class TicketServiceV1 implements TicketService {
     ticketRepository.update(ticket);
 
     final String historyAction = "Ticket Status is changed";
-    final String description =
-        format("{0} from {1} to {2}", historyAction, previousState, ticket.getState());
+    final String description = format(
+        "{0} from {1} to {2}",
+        historyAction, previousState, ticket.getState());
     historyService.save(id, historyAction, description);
   }
 }

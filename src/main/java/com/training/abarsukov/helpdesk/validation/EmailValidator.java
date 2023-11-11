@@ -1,7 +1,6 @@
 package com.training.abarsukov.helpdesk.validation;
 
 import com.training.abarsukov.helpdesk.validation.constraints.Email;
-
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 

@@ -3,6 +3,10 @@ package com.training.abarsukov.helpdesk.controller.advice;
 import com.training.abarsukov.helpdesk.exception.FileException;
 import com.training.abarsukov.helpdesk.exception.TicketStateException;
 import com.training.abarsukov.helpdesk.exception.description.ErrorMessage;
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.persistence.EntityNotFoundException;
+import javax.validation.ConstraintViolationException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -14,21 +18,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
-import javax.persistence.EntityNotFoundException;
-import javax.validation.ConstraintViolationException;
-import java.util.List;
-import java.util.stream.Collectors;
-
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
-  private static final String SPACE = " ";
 
   @ExceptionHandler(MaxUploadSizeExceededException.class)
   public ResponseEntity<ErrorMessage> handleMaxUploadSizeExceededException(
       MaxUploadSizeExceededException exception) {
-    final String reason =
-        "The size of the attached file should not be greater than 5 Mb. Please select another file.";
+    final String reason = "The size of the attached file should not be greater than 5 Mb."
+        + " Please select another file.";
     return buildResponse(exception, reason, HttpStatus.BAD_REQUEST);
   }
 
@@ -39,7 +36,8 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(FileException.class)
-  public ResponseEntity<ErrorMessage> handleFileException(FileException exception) {
+  public ResponseEntity<ErrorMessage> handleFileException(
+      FileException exception) {
     return buildResponse(exception, HttpStatus.BAD_REQUEST);
   }
 
@@ -70,21 +68,14 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<ErrorMessage> handleMethodArgumentNotValidException(
       MethodArgumentNotValidException exception) {
-    final List<String> reasons =
-        exception.getBindingResult().getAllErrors().stream()
-            .map(DefaultMessageSourceResolvable::getDefaultMessage)
-            .collect(Collectors.toList());
-
+    final List<String> reasons = extractReasonsFromBindingResult(exception);
     return buildResponse(exception, reasons, HttpStatus.BAD_REQUEST);
   }
 
   @ExceptionHandler(BindException.class)
-  public ResponseEntity<ErrorMessage> handleBeanPropertyBindingResult(BindException exception) {
-    final List<String> reasons =
-        exception.getBindingResult().getAllErrors().stream()
-            .map(DefaultMessageSourceResolvable::getDefaultMessage)
-            .collect(Collectors.toList());
-
+  public ResponseEntity<ErrorMessage> handleBeanPropertyBindingResult(
+      BindException exception) {
+    final List<String> reasons = extractReasonsFromBindingResult(exception);
     return buildResponse(exception, reasons, HttpStatus.BAD_REQUEST);
   }
 
@@ -94,18 +85,27 @@ public class GlobalExceptionHandler {
     return buildResponse(exception, HttpStatus.BAD_REQUEST);
   }
 
+  private List<String> extractReasonsFromBindingResult(BindException exception) {
+    return exception.getBindingResult()
+        .getAllErrors()
+        .stream()
+        .map(DefaultMessageSourceResolvable::getDefaultMessage)
+        .collect(Collectors.toList());
+  }
+
   private ResponseEntity<ErrorMessage> buildResponse(Throwable throwable, HttpStatus status) {
     return buildResponse(throwable, throwable.getMessage(), status);
   }
 
   private ResponseEntity<ErrorMessage> buildResponse(
       Throwable throwable, List<String> reasons, HttpStatus status) {
-    final String concatenatedReasons = String.join(SPACE, reasons);
+    final String concatenatedReasons = String.join(" ", reasons);
     return buildResponse(throwable, concatenatedReasons, status);
   }
 
   private ResponseEntity<ErrorMessage> buildResponse(
       Throwable throwable, String reason, HttpStatus status) {
-    return ResponseEntity.status(status).body(new ErrorMessage(throwable, reason, status));
+    return ResponseEntity.status(status)
+        .body(new ErrorMessage(throwable, reason, status));
   }
 }

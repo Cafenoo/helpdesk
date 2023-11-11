@@ -1,14 +1,17 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>New ticket for approval</title>
+  <meta charset="UTF-8">
+  <title>New ticket for approval</title>
 </head>
 <body>
-    <div>
-        <p>Dear Managers, </p>
-        <br/>
-        <p>New ticket <a th:href="${url} + ${ticketId}"><td th:text="${ticketId}"></td></a> is waiting for your approval.</p>
-    </div>
+<div>
+  <p>Dear Managers, </p>
+  <br/>
+  <p>New ticket <a th:href="${url} + ${ticketId}">
+    <td th:text="${ticketId}"></td>
+  </a> is waiting for your approval.
+  </p>
+</div>
 </body>
 </html>

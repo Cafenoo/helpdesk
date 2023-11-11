@@ -1,5 +1,7 @@
 package com.training.abarsukov.helpdesk.security.config;
 
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
+
 import com.training.abarsukov.helpdesk.model.enums.Role;
 import com.training.abarsukov.helpdesk.security.jwt.JwtAuthenticationFilter;
 import com.training.abarsukov.helpdesk.security.jwt.JwtAuthorizationFilter;
@@ -20,8 +22,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
-
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(jsr250Enabled = true, prePostEnabled = true, securedEnabled = true)
@@ -37,6 +37,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.cors()
+
         .and()
         .httpBasic()
         .disable()
@@ -44,8 +45,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .disable()
         .sessionManagement()
         .sessionCreationPolicy(STATELESS)
+
         .and()
-        .addFilter(new JwtAuthenticationFilter(jwtProperties, authenticationManager()))
+        .addFilter(
+            new JwtAuthenticationFilter(jwtProperties, authenticationManager()))
         .addFilterAfter(
             new JwtAuthorizationFilter(jwtProperties, userDetailsService),
             JwtAuthenticationFilter.class)
@@ -58,12 +61,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .hasAnyAuthority(Role.EMPLOYEE.name(), Role.MANAGER.name())
         .anyRequest()
         .authenticated()
+
         .and()
         .logout()
         .logoutUrl("/logout")
         .logoutSuccessUrl("/login");
 
-    http.headers().frameOptions().disable();
+    http.headers()
+        .frameOptions()
+        .disable();
   }
 
   @Bean

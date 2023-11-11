@@ -1,10 +1,9 @@
 package com.training.abarsukov.helpdesk.validation;
 
 import com.training.abarsukov.helpdesk.validation.constraints.FileExtension;
-import org.springframework.web.multipart.MultipartFile;
-
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import org.springframework.web.multipart.MultipartFile;
 
 public class FileExtensionValidator implements ConstraintValidator<FileExtension, MultipartFile> {
 

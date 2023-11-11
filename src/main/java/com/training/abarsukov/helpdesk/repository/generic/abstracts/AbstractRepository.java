@@ -1,27 +1,29 @@
 package com.training.abarsukov.helpdesk.repository.generic.abstracts;
 
-import com.training.abarsukov.helpdesk.repository.generic.Repository;
+import static java.text.MessageFormat.format;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
+import com.training.abarsukov.helpdesk.repository.generic.Repository;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import static java.text.MessageFormat.format;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 public abstract class AbstractRepository<T, ID> implements Repository<T, ID> {
 
-  private static final String QUERY_TO_DELETE_BY_ID = "delete from {0} e where e.id = :id";
+  private static final String QUERY_TO_DELETE_BY_ID =
+      "delete from {0} e "
+          + "where e.id = :id";
 
   protected static final String AND = " and ";
 
   protected static final String WHERE = " where ";
 
-  @PersistenceContext protected EntityManager entityManager;
+  @PersistenceContext
+  protected EntityManager entityManager;
 
   @Override
   public T save(T entity) {
@@ -31,7 +33,8 @@ public abstract class AbstractRepository<T, ID> implements Repository<T, ID> {
 
   @Override
   public Optional<T> findById(ID id) {
-    return Optional.ofNullable(entityManager.find(getGenericClass(), id));
+    final T entity = entityManager.find(getGenericClass(), id);
+    return Optional.ofNullable(entity);
   }
 
   @Override
@@ -92,6 +95,8 @@ public abstract class AbstractRepository<T, ID> implements Repository<T, ID> {
   @SuppressWarnings("unchecked")
   private Class<T> getGenericClass() {
     return (Class<T>)
-        ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+        ((ParameterizedType) getClass()
+            .getGenericSuperclass())
+            .getActualTypeArguments()[0];
   }
 }

@@ -1,5 +1,7 @@
 package com.training.abarsukov.helpdesk.service.impl;
 
+import static org.springframework.transaction.annotation.Propagation.SUPPORTS;
+
 import com.training.abarsukov.helpdesk.converter.AttachmentConverter;
 import com.training.abarsukov.helpdesk.dto.AttachmentDto;
 import com.training.abarsukov.helpdesk.model.Attachment;
@@ -9,13 +11,10 @@ import com.training.abarsukov.helpdesk.security.UserService;
 import com.training.abarsukov.helpdesk.service.AttachmentService;
 import com.training.abarsukov.helpdesk.service.HistoryService;
 import com.training.abarsukov.helpdesk.service.TicketAccessHandler;
+import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityNotFoundException;
-
-import static org.springframework.transaction.annotation.Propagation.SUPPORTS;
 
 @Service
 @RequiredArgsConstructor
@@ -36,10 +35,9 @@ public class AttachmentServiceV1 implements AttachmentService {
   public void delete(Long ticketId) {
     ticketAccessHandler.findByIdToEdit(ticketId);
 
-    final Attachment attachment =
-        attachmentRepository
-            .findByTicketId(ticketId, userService.getUser())
-            .orElseThrow(EntityNotFoundException::new);
+    final Attachment attachment = attachmentRepository
+        .findByTicketId(ticketId, userService.getUser())
+        .orElseThrow(EntityNotFoundException::new);
 
     attachmentRepository.deleteByTicketId(ticketId);
 
@@ -54,7 +52,10 @@ public class AttachmentServiceV1 implements AttachmentService {
     ticketAccessHandler.findByIdToEdit(ticketId);
 
     final Attachment attachment = attachmentConverter.convertToEntity(attachmentDto);
-    attachment.setTicket(Ticket.builder().id(ticketId).build());
+    Ticket ticket = Ticket.builder()
+        .id(ticketId)
+        .build();
+    attachment.setTicket(ticket);
     attachmentRepository.save(attachment);
 
     final String action = "File is attached";
@@ -67,8 +68,7 @@ public class AttachmentServiceV1 implements AttachmentService {
   public void edit(Long ticketId, AttachmentDto attachmentDto) {
     ticketAccessHandler.findByIdToEdit(ticketId);
 
-    attachmentRepository
-        .findByTicketId(ticketId, userService.getUser())
+    attachmentRepository.findByTicketId(ticketId, userService.getUser())
         .ifPresentOrElse(
             attachment -> editAttachment(attachmentDto, ticketId, attachment),
             () -> save(ticketId, attachmentDto));
@@ -77,18 +77,16 @@ public class AttachmentServiceV1 implements AttachmentService {
   @Override
   @Transactional(propagation = SUPPORTS, readOnly = true)
   public AttachmentDto find(Long ticketId) {
-    final Attachment attachment =
-        attachmentRepository
-            .findByTicketId(ticketId, userService.getUser())
-            .orElseThrow(EntityNotFoundException::new);
+    final Attachment attachment = attachmentRepository
+        .findByTicketId(ticketId, userService.getUser())
+        .orElseThrow(EntityNotFoundException::new);
     return attachmentConverter.convertToDto(attachment);
   }
 
   @Override
   @Transactional(propagation = SUPPORTS, readOnly = true)
   public Attachment findToDownload(Long attachmentId) {
-    return attachmentRepository
-        .findByTicketId(attachmentId, userService.getUser())
+    return attachmentRepository.findByTicketId(attachmentId, userService.getUser())
         .orElseThrow(EntityNotFoundException::new);
   }
 

@@ -1,17 +1,16 @@
 package com.training.abarsukov.helpdesk.dto;
 
+import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.training.abarsukov.helpdesk.validation.constraints.EnterField;
+import java.sql.Timestamp;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-import java.sql.Timestamp;
-
-import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 
 @Data
 @Builder

@@ -3,6 +3,7 @@ package com.training.abarsukov.helpdesk.service;
 import com.training.abarsukov.helpdesk.model.Ticket;
 
 public interface EmailService {
+
   void sendMailThatTicketHasToBeApproved(Ticket ticket);
 
   void sendMailThatTicketHasBeenApproved(Ticket ticket);
