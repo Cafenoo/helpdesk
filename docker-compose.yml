@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  backend:
+    container_name: "backend"
+    build: .
+    ports:
+      - "8080:8080"
+    networks:
+      - helpdesk
+    environment:
+      EMAIL_USERNAME: ''
+      EMAIL_TOKEN: ''
+  frontend:
+    container_name: "frontend"
+    build: ./java-learn-app-main
+    ports:
+      - "3000:3000"
+    networks:
+      - helpdesk
+
+networks:
+  helpdesk:
+    driver:
+      bridge

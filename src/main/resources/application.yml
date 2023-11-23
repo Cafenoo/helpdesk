@@ -35,9 +35,9 @@ spring:
     show-sql: false
   mail:
     encoding: UTF-8
-    host: smtp.gmail.com
+    host: ${EMAIL_HOST:smtp.gmail.com}
     password: ${EMAIL_TOKEN}
-    port: 587
+    port: ${EMAIL_PORT:587}
     properties:
       mail:
         smtp:
@@ -48,7 +48,7 @@ spring:
           timeout: 5000
           writetimeout: 5000
     url: http://localhost:3000/main-page/
-    username: darinkarlsson@gmail.com
+    username: ${EMAIL_USERNAME}
   servlet:
     multipart:
       max-file-size: 5MB
